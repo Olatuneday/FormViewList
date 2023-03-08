@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form View List</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <style>
+        body{
+            height: max-content; overflow:hidden auto; padding: 5px;
+        }
+        h1 {
+            margin:0 0 10px 0; padding: 5px; border-radius:6px; border: 1px solid rgb(238,238,238);
+        }
+        .d-none {
+            display: none;
+        }
+        #name-view, #gender-marital, nm {
+            text-transform: capitalize;
+        }
+    </style>
+    <h1><u>_Form View List_</u></h1>
+    <div style="display:flex; flex-direction: row; justify-content: space-between; align-items: flex-start;">
+        <div id="form" style="background-color: rgb(238, 238, 238); width: 25%; max-height: 100%; border: 1px solid rgb(228, 228, 228); padding: 5px; ">
+            <h3 style="background-color: rgb(198, 198, 198); margin: 0 0 10px 0; padding: 0 5px; border: 1px solid rgb(198, 198, 198);">New Profile</h3>
+            <style>
+                div> form> label{
+                    margin: 5px 0;
+                }
+                div> form input[type="text"],input[type="email"],input[type="tel"]{
+                    margin-left: auto; margin-right: 0; padding: 5px;
+                }
+                div> form label ast{
+                    color: red;
+                }
+                div> form> label> select {
+                    padding: 5px;
+                }
+                form {
+                    display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;
+                }
+            </style>
+            <form>
+                <label for="fullname">Full Name: <ast>*</ast> 
+                    <input type="text" name="fullname" id="fullname" value="" maxlength="50" placeholder="Full Name" required />
+                </label>
+                <label for="email">Email: <gap w="5px"/> <ast>*</ast> 
+                    <input type="email" name="email" id="email" value="" maxlength="50" placeholder="Email Address" required />
+                </label>
+                <label for="phone">Phone No.: <ast>*</ast> 
+                    <input type="tel" name="phone" id="phone" value="" maxlength="50" placeholder="Phone Number" required />
+                </label>
+                <div>
+                    <label>Gender: <ast>*</ast> </label>
+                    <input type="radio" name="gender" id="male" value="male" checked required /> Male
+                    <input type="radio" name="gender" id="female" value="female" required /> Female
+                </div>
+                <label for="marital">Marital Status: <ast>*</ast> 
+                    <select name="marital" id="marital" required>
+                        <option> --Select-- </option>
+                        <option value="single" selected> Single </option>
+                        <option value="married"> Married </option>
+                        <option value="divorced"> Divorced </option>
+                    </select>
+                </label>
+                <label for="address" style="display: flex; flex-direction: column; justify-content: flex-start; align-items: stretch;"><span>Address: <ast>*</ast></span> </label>
+                <input type="text" name="address" id="address" value="" maxlength="50" placeholder="Address" required style="margin: 0;" />
+                <label for="bio-data" style="text-align: start;">Bio-Data: <ast>*</ast> </label>
+                <textarea name="bio-data" id="bio-data" rows="4" cols="20" maxlength="100" placeholder="Just About You..." required></textarea>
+                <label style="margin: 0; margin-top: 5px; padding: 0;"> 
+                    <input type="submit" onclick="return (form_mode=='new'? createProfile() : editProfile());" name="submit" id="submit" value="Submit" style="padding: 5px;" />
+                    <input type="reset" name="reset" id="reset" value="Reset" style="padding: 5px;" />
+                </label>
+            </form>
+        </div>
+
+        <div id="view" style="width: calc(50% - 50px); max-height: 100%; border: 1px solid rgb(228, 228, 228); padding: 5px;">
+            <h3 style="background-color: rgb(238, 238, 238); margin: 0 0 10px 0; padding: 0 5px; border: 1px solid rgb(198, 198, 198);">Profile View</h3>
+            <div style="margin: 5px 10px; padding: 5px 10px;">
+                <div style="margin:0; padding: 5px; display: flex; align-items: flex-start; flex-wrap: wrap;">
+                    <img src="./foto.png" width="50" alt=""/>
+                    <div style="margin:0; padding: 5px; display: flex; flex-direction: column; align-items: flex-start; flex-wrap: wrap;">
+                        <label><b><span id="name-view">Fullname...</span></b></label>
+                        <label>
+                            <b><i><span id="gender-marital">Gender, Marital Status.</span></i></b>
+                        </label>    
+                    </div>
+                </div>
+                <p id="bio-view" style="margin: 0; padding: 0 15px;"><em>"Bio-Data".</em></p>
+                <p style="margin: 5px 0; padding: 0 10px;">
+                    Contact: <span id="phone-email">Phone Number, Email Address.</span>
+                </p>
+                <p style="margin: 5px 0; padding: 0 10px;">
+                    Address: <span id="addrs">...</span>
+                </p>
+            </div>
+        </div>
+
+        <div id="list" style="width: 25%; max-height: 100%; border: 1px solid rgb(228, 228, 228); padding: 5px;">
+            <h3 style="background-color: rgb(238, 238, 238); margin: 0 0 10px 0; padding: 0 5px; border: 1px solid rgb(198, 198, 198);">Profile Log</h3>
+            <div style="overflow: hidden auto;">
+                <table style="width: 100%; border-collapse: collapse; border-radius: 6px; overflow: clip;">
+                    <tbody style="width: 100%;">
+                    <style>
+                        .list-prof-edit-btn{
+                            background-color: transparent; padding: 0; border: 0; width: 15px;
+                        }
+                        .prof-view-div {
+                            width: 100%; display: flex; justify-content: flex-start; align-items:flex-start;
+                            margin-top:1px; padding-bottom: 5px;
+                            border-bottom: 1px solid rgb(238, 238, 238);
+                        }
+                        .prof-view-div:hover {
+                            background-color: rgb(248, 248, 248);;
+                        }
+                        .prof-view-div:active {
+                            background-color: rgb(228, 228, 228);;
+                        }
+                        .prof-view-lab {
+                            width: 100%; margin-left: 5px; display: flex; flex-direction: column;
+                        }
+                        .prof-view-span {
+                            width:100%; display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap;
+                        }
+                    </style>
+                    </tbody>
+                    <tfoot>
+                        <style>
+                            tfoot>tr>td {
+                                text-transform: capitalize;
+                                font-variant: small-caps;
+                            }
+                        </style>
+                        <tr><td colspan="5" style="color: rgb(138, 138, 138); text-align: center;"> No Records found yet! </td></tr>
+                    </tfoot>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        let form_mode = "new";
+        let profiles = [];
+
+        function onEditBtnClicked(id) {
+            let prof = profiles.find((obj)=>(obj.id==id));
+            if(typeof prof !== "undefined"){
+                setProfileEditData(prof);
+            } else {
+                alert("Invalid Profile selected for Edit!");
+            } // end if
+        } // end fx
+
+        function onProfileSelected(id) {
+            let prof = profiles.find((obj)=>(obj.id==id));
+            if(typeof prof !== "undefined"){
+                setProfileViewData(prof);
+            } else {
+                alert("Invalid Profile selected for View!");
+            } // end if
+        } // end fx
+
+        function createProfile() {
+            let inputs = document.getElementById("form").querySelectorAll("input:not(#submit,#reset,#male:not(:checked),#female:not(:checked)), select, textarea");
+            let fullname = inputs[0].value;
+            let email = inputs[1].value;
+            let phone = inputs[2].value;
+            let gender = inputs[3].value
+            let marital = inputs[4].value
+            let addrs = inputs[5].value
+            let bio = inputs[6].value
+            let newId = Math.random().toString(36).substring(2,9).toUpperCase();
+            while(typeof profiles.find((obj)=>(obj.id==newId)) !== "undefined"){
+                newId = Math.random().toString(36).substring(2,9).toUpperCase();
+            };
+            let prof = {id:newId,fullname,email,phone,gender,marital,addrs,bio};
+            let val = addProfileList(prof);
+            if(val){
+                profiles.push(prof);
+                let form = document.querySelector('form');
+                //.reset();
+                console.log(form);
+                // .reset();
+            } // end if
+        } // end fx
+
+        function addProfileList(prof) {
+            let elmt = 
+            `<tr style="width: 100%;">
+                <td style="width: 100%;">
+                    <div id="${prof.id}" class="prof-view-div">
+                        <img src="./foto.png" width="35" alt="">
+                        <label class="prof-view-lab">
+                            <span class="prof-view-span">
+                                <nm><b>${prof.fullname}</b></nm>
+                                <button class="list-prof-edit-btn">
+                                    <img src="./edit.png" width="15" alt="" class="list-prof-edit-icon" />
+                                </button>
+                            </span>
+                            <nm><i>${prof.gender}, ${prof.phone}...</i></nm>
+                        </label>
+                    </div>
+                </td>
+            </tr>`;
+            let tbody = document.querySelector("table tbody");
+            let row = document.createElement("tr");
+            row.innerHTML = elmt;
+            tbody.append(row);
+            document.querySelector("table tfoot").classList.add("d-none");
+            return true;
+        } // end fx
+
+        function setProfileViewData(prof) {
+            let view = document.getElementById("view")
+            .querySelectorAll("#name-view, #gender-marital, #bio-view, #phone-email, #addrs");
+            let fullname = view[0];
+            let genderMarital = view[1];
+            let bioView = view[2];
+            let phoneEmail = view[3]
+            let addrs = view[4]
+            fullname.textContent = prof.fullname;
+            genderMarital.textContent = `${prof.gender}, ${prof.marital}.`;
+            bioView.textContent = `"${prof.bio}".`;
+            phoneEmail.textContent = `${prof.phone}, ${prof.email}.`;
+            addrs.textContent = `${prof.addrs}.`;
+        } // end fx
+    
+        (function(){
+            document.querySelector("table tbody").addEventListener("click", (evt)=>{
+                let target = evt.target;
+                let id = target.closest("div.prof-view-div").getAttribute("id");
+                if(target.classList.contains("list-prof-edit-btn") || target.classList.contains("list-prof-edit-icon")){
+                    onProfileSelected(id);
+                    onEditBtnClicked(id);
+                } else {
+                    onProfileSelected(id);
+                } // end if
+                evt.stopPropagation();
+                evt.preventDefault();
+            },false);
+        })();
+        (function(){
+            document.querySelector("form").addEventListener("submit", (evt)=>{
+                evt.stopPropagation();
+                evt.preventDefault();
+            });
+        })();
+    </script>
+</body>
+</html>
